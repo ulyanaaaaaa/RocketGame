@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="74a1fa46-5457-4351-88a1-04e228dd9212" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/FuelCounter.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/Scripts/IInput.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/BigCloud.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Cloud.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/SmallCloud.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/FailWindow.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/FuelBar.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/CloudSpawner.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/MoneySpawner.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Fuel.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/MoneyFabrica.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/CloudFabrica.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/FuelSpawner.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/FuelFabrica.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/KeabordInput.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Money.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ShopItem.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ShopItemViewer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ShopSpeedItemViewer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ShopFuelItem.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ShopFuelItemViewer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/MoneyCounter.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ShopSpeedItem.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/EntryPoint.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Rocket.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Fuel/Fuel.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Fuel/FuelBar.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Enviroment/InvisibleWall.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Enviroment/Ground.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Shop/Fuel/ShopFuelItem.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Shop/Fuel/ShopFuelItemViewer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Shop/Speed/ShopSpeedItem.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Shop/Speed/ShopSpeedItemViewer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/UI/FuelBar.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/UI/FuelCounter.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Core/EntryPoint.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Enviroment/Rocket.cs" />
+    </changedPaths>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2dEimv6QBQ1gjJRFkq4hcu6Q7sT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\Ulyana\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache",
+      "C:\\Users\\Ulyana\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache",
+      "C:\\Users\\Ulyana\\AppData\\Local\\Symbols\\src"
+    ]
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="74a1fa46-5457-4351-88a1-04e228dd9212" name="Default Changelist" comment="" />
+      <created>1709579800896</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1709579800896</updated>
+      <workItem from="1709579802507" duration="12533000" />
+      <workItem from="1709636921610" duration="5240000" />
+      <workItem from="1709643654651" duration="98000" />
+      <workItem from="1709656664245" duration="9479000" />
+      <workItem from="1709669815641" duration="7915000" />
+      <workItem from="1709678593274" duration="56000" />
+      <workItem from="1709717614556" duration="2284000" />
+      <workItem from="1709725349451" duration="938000" />
+      <workItem from="1709727303964" duration="448000" />
+      <workItem from="1709730183798" duration="697000" />
+      <workItem from="1714151790954" duration="1158000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>
