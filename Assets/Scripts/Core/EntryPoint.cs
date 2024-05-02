@@ -5,6 +5,16 @@ public class EntryPoint : MonoBehaviour
 {
     [SerializeField] private Canvas _canvas;
     [SerializeField] private Transform _rocketStartPoint;
+
+    [SerializeField] private RectTransform _fuelShopPosition;
+    [SerializeField] private RectTransform _speedShopPosition;
+    [SerializeField] private RectTransform _bestScorePosition;
+    [SerializeField] private RectTransform _moneyCounterPosition;
+    [SerializeField] private RectTransform _maxFuelPosition;
+    [SerializeField] private RectTransform _scoreCounterPosition;
+    [SerializeField] private RectTransform _fuelCounterPosition;
+    [SerializeField] private RectTransform _fuelBarPosition;
+    
     private KeabordInput _input;
     private MoneyFabrica _moneyFabrica;
     private MoneyFabrica _moneyFabricaCreated;
@@ -26,6 +36,10 @@ public class EntryPoint : MonoBehaviour
     private MoneyCounter _moneyCounterCreated;
     private FuelCounter _fuelCounter;
     private FuelCounter _fuelCounterCreated;
+    private BestScore _bestScore;
+    private BestScore _bestScoreCreated;
+    private ScoreCounter _scoreCounter;
+    private ScoreCounter _scoreCounterCreated;
     private InvisibleWall _invisibleWall;
     private InvisibleWall _invisibleLeftWallCreated;
     private InvisibleWall _invisibleRightWallCreated;
@@ -45,15 +59,19 @@ public class EntryPoint : MonoBehaviour
         _moneyCounter = Resources.Load<MoneyCounter>("MoneyCounter");
         _invisibleWall = Resources.Load<InvisibleWall>("InvisibleWall");
         _fuelCounter = Resources.Load<FuelCounter>("FuelCounter");
+        _bestScore = Resources.Load<BestScore>("BestScore");
+        _scoreCounter = Resources.Load<ScoreCounter>("ScoreCounter");
         CreateMoneyCounter();
         CreateFuelCounter();
         CreateRocket();
         CreateUI();
         _input.OnPlay += CreateSpawners;
+        _input.OnPlay += CreateScoreCounter;
         _input.OnPlay += DisableShop;
         _input.OnPlay += FuelBarCreated;
         _input.OnPlay += CreateInvisibleWall;
         _input.OnPlay += DisableFuel;
+        _input.OnPlay += DisableBestScoreUI;
     }
 
     private void CreateUI()
@@ -61,6 +79,27 @@ public class EntryPoint : MonoBehaviour
        CreateFailWindow();
        CreateShopFuelItem();
        CreateSpeedFuelItem();
+       CreateBestScore();
+    }
+
+    private void CreateBestScore()
+    {
+        _bestScoreCreated = Instantiate(_bestScore,
+            _bestScorePosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _bestScoreCreated.Setup(_rocketCreated);
+        _bestScoreCreated.transform.position = _bestScorePosition.GetComponent<RectTransform>().position;
+    }
+
+    private void CreateScoreCounter()
+    {
+        _scoreCounterCreated = Instantiate(_scoreCounter,
+            _scoreCounterPosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _scoreCounterCreated.Setup(_rocketCreated);
+        _scoreCounterCreated.transform.position = _scoreCounterPosition.GetComponent<RectTransform>().position;
     }
 
     private void CreateFailWindow()
@@ -76,45 +115,41 @@ public class EntryPoint : MonoBehaviour
     private void CreateSpeedFuelItem()
     {
         _shopSpeedItemCreated = Instantiate(_shopSpeedItem, 
-            _shopSpeedItem.GetComponent<RectTransform>().localPosition, 
+            _speedShopPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
             _canvas.transform);
+        _shopSpeedItemCreated.transform.position = _speedShopPosition.GetComponent<RectTransform>().position;
         _shopSpeedItemCreated.Setup(_rocketCreated);
         _shopSpeedItemCreated.GetComponent<ShopSpeedItemViewer>().Setup(_rocketCreated);
-        _shopSpeedItemCreated.GetComponent<RectTransform>().localPosition = 
-            _shopSpeedItem.GetComponent<RectTransform>().localPosition;
     }
 
     private void CreateShopFuelItem()
     {
         _shopFuelItemCreated = Instantiate(_shopFuelItem, 
-            _shopFuelItem.GetComponent<RectTransform>().localPosition, 
+            _fuelShopPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
             _canvas.transform);
         _shopFuelItemCreated.Setup(_rocketCreated);
         _shopFuelItemCreated.GetComponent<ShopFuelItemViewer>().Setup(_rocketCreated);
-        _shopFuelItemCreated.GetComponent<RectTransform>().localPosition = 
-            _shopFuelItem.GetComponent<RectTransform>().localPosition;
+        _shopFuelItemCreated.transform.position = _fuelShopPosition.GetComponent<RectTransform>().position;
     }
 
     private void CreateFuelCounter()
     {
         _fuelCounterCreated = Instantiate(_fuelCounter,
-            _fuelCounter.GetComponent<RectTransform>().localPosition, 
+            _fuelCounterPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
             _canvas.transform);
-        _fuelCounterCreated.GetComponent<RectTransform>().localPosition = 
-            _fuelCounter.GetComponent<RectTransform>().localPosition;
+        _fuelCounterCreated.transform.position = _fuelCounterPosition.GetComponent<RectTransform>().position;
     }
 
     private void CreateMoneyCounter()
     {
         _moneyCounterCreated = Instantiate(_moneyCounter,
-            _moneyCounter.GetComponent<RectTransform>().localPosition, 
+            _moneyCounterPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
             _canvas.transform);
-        _moneyCounterCreated.GetComponent<RectTransform>().localPosition = 
-            _moneyCounter.GetComponent<RectTransform>().localPosition;
+        _moneyCounterCreated.transform.position = _moneyCounterPosition.GetComponent<RectTransform>().position;
     }
 
     private void CreateInvisibleWall()
@@ -141,13 +176,11 @@ public class EntryPoint : MonoBehaviour
     private void FuelBarCreated()
     {
         _fuelBarCreated = Instantiate(_fuelBar, 
-            _failWindow.GetComponent<RectTransform>().localPosition, 
+            _fuelBarPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
             _canvas.transform);
         _fuelBarCreated.Setup(_rocketCreated);
-        _fuelBarCreated.GetComponent<RectTransform>().localPosition = 
-            _fuelBar.GetComponent<RectTransform>().localPosition;
-
+        _fuelBarCreated.transform.position = _fuelBarPosition.GetComponent<RectTransform>().position;
     }
 
     private void DisableShop()
@@ -159,6 +192,11 @@ public class EntryPoint : MonoBehaviour
     private void DisableFuel()
     {
         _fuelCounterCreated.gameObject.SetActive(false);
+    }
+    
+    private void DisableBestScoreUI()
+    {
+        _bestScoreCreated.gameObject.SetActive(false);
     }
     
     private IEnumerator CreateWallTick()

@@ -12,6 +12,6 @@ public class MoneyCounter : MonoBehaviour
 
     public void CurrentMoney(int count)
     {
-        _counter.text = $"{count.ToString()}";
+        _counter.text = $"Money: {count.ToString()}";
     }
 }

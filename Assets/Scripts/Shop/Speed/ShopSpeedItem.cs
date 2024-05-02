@@ -8,8 +8,10 @@ public class ShopSpeedItem : MonoBehaviour
     public Action OnUpdate;
     [field: SerializeField] public float Speed { get; private set; }
     [field: SerializeField] public int Price { get; private set; }
+    private string _id = "shop_speed_item";
     private Rocket _rocket;
     private Button _button;
+    private ISaveService _saveService;
 
     public void Setup(Rocket rocket)
     {
@@ -18,9 +20,20 @@ public class ShopSpeedItem : MonoBehaviour
     
     private void Awake()
     {
-        Load();
         _button = GetComponent<Button>();
         _button.onClick.AddListener(TryBuy);
+    }
+
+    private void Start()
+    {
+        _saveService = new SaveService();
+        
+        if (!_saveService.Exists(_id))
+        {
+            Save();
+        }
+        else
+            Load(); 
     }
 
     private void TryBuy()
@@ -34,19 +47,29 @@ public class ShopSpeedItem : MonoBehaviour
             Save();
         }
     }
+    
+    private void Save()
+    {
+        ShopSpeedItemSaveData data = new ShopSpeedItemSaveData();
+        data.Speed = Speed;
+        data.Price = Price;
+        _saveService.Save(_id, data);
+        OnUpdate?.Invoke();
+    }
 
     private void Load()
     {
-        if (PlayerPrefs.HasKey("ShopSpeed"))
-            Speed = PlayerPrefs.GetFloat("ShopSpeed", Speed);
-        
-        if (PlayerPrefs.HasKey("ShopSpeedPrice"))
-            Price = PlayerPrefs.GetInt("ShopSpeedPrice", Price);
+        _saveService.Load<ShopSpeedItemSaveData>(_id, data =>
+        {
+            Price = data.Price;
+            Speed = data.Speed;
+        });
+        OnUpdate?.Invoke();
     }
+}
 
-    private void Save()
-    {
-        PlayerPrefs.SetFloat("ShopSpeed", Speed);
-        PlayerPrefs.SetInt("ShopSpeedPrice", Price);
-    }
+public class ShopSpeedItemSaveData
+{
+    public float Speed;
+    public int Price;
 }

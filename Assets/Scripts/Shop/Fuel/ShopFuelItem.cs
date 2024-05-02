@@ -7,8 +7,10 @@ public class ShopFuelItem : MonoBehaviour
     public Action OnUpdate;
     [field: SerializeField] public float Fuel { get; private set; }
     [field: SerializeField] public int Price { get; private set; }
+    private string _id = "shop_fuel_item";
     private Rocket _rocket;
     private Button _button;
+    private ISaveService _saveService;
 
     public void Setup(Rocket rocket)
     {
@@ -17,9 +19,20 @@ public class ShopFuelItem : MonoBehaviour
     
     private void Awake()
     {
-        Load();
         _button = GetComponent<Button>();
         _button.onClick.AddListener(TryBuy);
+    }
+    
+    private void Start()
+    {
+        _saveService = new SaveService();
+        
+        if (!_saveService.Exists(_id))
+        {
+            Save();
+        }
+        else
+            Load(); 
     }
 
     private void TryBuy()
@@ -34,18 +47,28 @@ public class ShopFuelItem : MonoBehaviour
         }
     }
 
-    private void Load()
-    {
-        if (PlayerPrefs.HasKey("ShopFuel"))
-            Fuel = PlayerPrefs.GetFloat("ShopFuel", Fuel);
-        
-        if (PlayerPrefs.HasKey("ShopFuelPrice"))
-            Price = PlayerPrefs.GetInt("ShopFuelPrice", Price);
-    }
-
     private void Save()
     {
-        PlayerPrefs.SetFloat("ShopFuel", Fuel);
-        PlayerPrefs.SetInt("ShopFuelPrice", Price);
+        ShopFuelItemSaveData data = new ShopFuelItemSaveData();
+        data.Fuel = Fuel;
+        data.Price = Price;
+        _saveService.Save(_id, data);
+        OnUpdate?.Invoke();
     }
+
+    private void Load()
+    {
+        _saveService.Load<ShopFuelItemSaveData>(_id, data =>
+        {
+            Price = data.Price;
+            Fuel = data.Fuel;
+        });
+        OnUpdate?.Invoke();
+    }
+}
+
+public class ShopFuelItemSaveData
+{
+    public float Fuel;
+    public int Price;
 }
