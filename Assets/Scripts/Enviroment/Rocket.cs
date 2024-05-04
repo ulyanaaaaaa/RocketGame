@@ -3,48 +3,73 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Rocket : MonoBehaviour
+public class Rocket : MonoBehaviour, IPause
 {
     public Action OnDie;
 
-    [field: SerializeField] public float MaxFuel { get; private set; } = 100;
+    [field: SerializeField] public float MaxFuel { get; private set; }
     [field: SerializeField] public float Fuel { get; private set; }
     public int Wallet { get; private set; }
-    
-    private float _speed;
+    public float Speed{ get; private set; }
+
+    [SerializeField] private Transform _patronSpawnPosition;
+    private string _id = "rocket";
     private Rigidbody _rigidbody;
+    private Patron _patron;
     private KeabordInput _input;
     private Coroutine _fuelTick;
     private MoneyCounter _moneyCounter;
     private FuelCounter _fuelCounter;
     private bool _isPlay;
+    private float _tempSpeed;
+    private ISaveService _saveService;
+    private PauseService _pauseService;
     
-    public void Setup(KeabordInput input, MoneyCounter moneyCounter, FuelCounter fuelCounter)
+    public void Setup(KeabordInput input, MoneyCounter moneyCounter, FuelCounter fuelCounter, PauseService pauseService)
     {
+        _pauseService = pauseService;
         _input = input;
         _moneyCounter = moneyCounter;
         _fuelCounter = fuelCounter;
     }
 
+    private void Awake()
+    {
+        _patron = Resources.Load<Patron>("Patron");
+    }
+
     private void Start()
     {
-        Load();
+        _pauseService.AddPause(this);
+        _saveService = new SaveService();
+        
+        if (!_saveService.Exists(_id))
+        {
+            Wallet = 0;
+            MaxFuel = 50;
+            Speed = 10;
+            Save();
+        }
+        else
+            Load(); 
+        
         Fuel = MaxFuel;
         _moneyCounter.CurrentMoney(Wallet);
         _fuelCounter.CurrentMaxFuel(MaxFuel);
         _rigidbody = GetComponent<Rigidbody>();
         _input.OnPlay += StartPlay;
+        _input.OnShoot += Shoot;
     }
 
     private void Update()
     {
         if (_isPlay)
-            _rigidbody.velocity = Vector3.up * _speed;
+            _rigidbody.velocity = Vector3.up * Speed;
     }
     
     public void AddSpeed(float speed)
     {
-        _speed += speed;
+        Speed += speed;
     }
 
     public void AddFuel(float fuel)
@@ -76,34 +101,39 @@ public class Rocket : MonoBehaviour
         _isPlay = true;
         _fuelTick = StartCoroutine(FuelTick());
     }
+
+    private void Shoot()
+    {
+        Instantiate(_patron, _patronSpawnPosition.position, Quaternion.identity).Setup(this);
+    }
     
     private void TurnLeft()
     {
-        _rigidbody.velocity = (Vector3.left + Vector3.up) * _speed;
+        _rigidbody.velocity = (Vector3.left + Vector3.up) * Speed;
     }
     
     private void TurnRight()
     {
-        _rigidbody.velocity = (Vector3.right + Vector3.up) * _speed;
+        _rigidbody.velocity = (Vector3.right + Vector3.up) * Speed;
     }
     
     private void Save()
     {
-        PlayerPrefs.SetInt("Wallet", Wallet);
-        PlayerPrefs.SetFloat("Speed", _speed);
-        PlayerPrefs.SetFloat("MaxFuel", MaxFuel);
+        RocketSaveData data = new RocketSaveData();
+        data.Wallet = Wallet;
+        data.MaxFuel = MaxFuel;
+        data.Speed = Speed;
+        _saveService.Save(_id, data);
     }
 
     private void Load()
     {
-        if (PlayerPrefs.HasKey("Wallet"))
-            Wallet = PlayerPrefs.GetInt("Wallet", Wallet);
-
-        if (PlayerPrefs.HasKey("Speed"))
-            _speed = PlayerPrefs.GetFloat("Speed", _speed);
-        
-        if (PlayerPrefs.HasKey("MaxFuel"))
-            MaxFuel = PlayerPrefs.GetFloat("MaxFuel", MaxFuel);
+        _saveService.Load<RocketSaveData>(_id, data =>
+        {
+            Wallet = data.Wallet;
+            MaxFuel = data.MaxFuel;
+            Speed = data.Speed;
+        });
     }
     
     private void RemoveValue(int amount)
@@ -146,4 +176,26 @@ public class Rocket : MonoBehaviour
             }
         }
     }
+
+    public void Pause()
+    {
+        _rigidbody.constraints = RigidbodyConstraints.FreezePositionX;
+        _rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
+        StopCoroutine(_fuelTick);
+    }
+
+    public void Resume()
+    {
+        _rigidbody.constraints = RigidbodyConstraints.None;
+        _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        _fuelTick = StartCoroutine(FuelTick());
+    }
+}
+
+public class RocketSaveData
+{
+    public int Wallet;
+    public float MaxFuel;
+    public float Speed;
 }

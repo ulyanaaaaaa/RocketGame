@@ -2,11 +2,17 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(CloudFabrica))]
-public class CloudSpawner : MonoBehaviour
+public class CloudSpawner : MonoBehaviour, IPause
 {
    [SerializeField] private float _delay;
    private Coroutine _spawnTick;
+   private PauseService _pauseService;
    private CloudFabrica _cloudFabrica;
+
+   public void Setup(PauseService pauseService)
+   {
+      _pauseService = pauseService;
+   }
 
    private void Awake()
    {
@@ -15,6 +21,7 @@ public class CloudSpawner : MonoBehaviour
 
    private void Start()
    {
+      _pauseService.AddPause(this);
       _spawnTick = StartCoroutine(SpawnTick());
    }
 
@@ -27,5 +34,15 @@ public class CloudSpawner : MonoBehaviour
          _cloudFabrica.CreateBigCloud();
          _cloudFabrica.CreateSmallCloud();
       }
+   }
+
+   public void Pause()
+   {
+      StopCoroutine(_spawnTick);
+   }
+
+   public void Resume()
+   { 
+      _spawnTick = StartCoroutine(SpawnTick());
    }
 }

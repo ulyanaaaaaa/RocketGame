@@ -1,19 +1,67 @@
 using System;
 using UnityEngine;
 
-public class KeabordInput : MonoBehaviour
+public class KeabordInput : MonoBehaviour, IPause
 {
     public Action OnRightClicked;
     public Action OnLeftClicked;
     public Action OnPlay;
+    public Action OnShoot;
+    private Rocket _rocket;
+    private PauseService _pauseService;
+    private bool _isPlay;
+    private bool _isPause;
+
+    public void Setup(Rocket rocket)
+    {
+        _rocket = rocket;
+    }
+
+    private void Awake()
+    {
+        _pauseService = GetComponent<PauseService>();
+    }
+
+    private void Start()
+    {
+        _pauseService.AddPause(this);
+        _rocket.OnDie += Die;
+    }
     
     private void Update()
     {
+        if (_isPause)
+            return;
+        
         if (Input.GetKey(KeyCode.D))
             OnRightClicked?.Invoke();
         if (Input.GetKey(KeyCode.A))
             OnLeftClicked?.Invoke();
-        if (Input.GetKeyDown(KeyCode.W))
+        
+        if (Input.GetKeyDown(KeyCode.W) && !_isPlay)
+        {
+            _isPlay = true;
             OnPlay?.Invoke();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.W) && _isPlay)
+        {
+            OnShoot?.Invoke();
+        }
+    }
+
+    private void Die()
+    {
+        _isPlay = false;
+    }
+
+    public void Pause()
+    {
+        _isPause = true;
+    }
+
+    public void Resume()
+    {
+        _isPause = false;
     }
 }

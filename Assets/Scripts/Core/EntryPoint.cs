@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EntryPoint : MonoBehaviour
+public class EntryPoint : MonoBehaviour, IPause
 {
     [SerializeField] private Canvas _canvas;
     [SerializeField] private Transform _rocketStartPoint;
@@ -14,7 +14,14 @@ public class EntryPoint : MonoBehaviour
     [SerializeField] private RectTransform _scoreCounterPosition;
     [SerializeField] private RectTransform _fuelCounterPosition;
     [SerializeField] private RectTransform _fuelBarPosition;
-    
+    [SerializeField] private RectTransform _pausePosition;
+    [SerializeField] private RectTransform _resumeMenuPosition;
+
+    private PauseService _pauseService;
+    private Pause _pause;
+    private Pause _pauseCreated;
+    private ResumeMenu _resume;
+    private ResumeMenu _resumeCreated;
     private KeabordInput _input;
     private MoneyFabrica _moneyFabrica;
     private MoneyFabrica _moneyFabricaCreated;
@@ -47,10 +54,13 @@ public class EntryPoint : MonoBehaviour
 
     private void Awake()
     {
+        _pauseService = GetComponent<PauseService>();
         _input = GetComponent<KeabordInput>();
         _rocket = Resources.Load<Rocket>("Rocket");
         _failWindow = Resources.Load<FailWindow>("FailWindow"); 
-        _fuelBar = Resources.Load<FuelBar>("FuelBar"); 
+        _fuelBar = Resources.Load<FuelBar>("FuelBar");
+        _pause = Resources.Load<Pause>("Pause");
+        _resume = Resources.Load<ResumeMenu>("ResumeMenu");
         _moneyFabrica = Resources.Load<MoneyFabrica>("MoneyFabrica");
         _cloudFabrica = Resources.Load<CloudFabrica>("CloudFabrica");
         _fuelFabrica = Resources.Load<FuelFabrica>("FuelFabrica");
@@ -65,6 +75,7 @@ public class EntryPoint : MonoBehaviour
         CreateFuelCounter();
         CreateRocket();
         CreateUI();
+        _pauseService.AddPause(this);
         _input.OnPlay += CreateSpawners;
         _input.OnPlay += CreateScoreCounter;
         _input.OnPlay += DisableShop;
@@ -72,6 +83,7 @@ public class EntryPoint : MonoBehaviour
         _input.OnPlay += CreateInvisibleWall;
         _input.OnPlay += DisableFuel;
         _input.OnPlay += DisableBestScoreUI;
+        _input.OnPlay += CreatePause;
     }
 
     private void CreateUI()
@@ -80,6 +92,30 @@ public class EntryPoint : MonoBehaviour
        CreateShopFuelItem();
        CreateSpeedFuelItem();
        CreateBestScore();
+    }
+
+    private void CreatePause()
+    {
+        _pauseCreated = Instantiate(_pause,
+            _pausePosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _pauseCreated.Setup(GetComponent<PauseService>());
+        _pauseCreated.transform.position = _pausePosition.GetComponent<RectTransform>().position;
+        _pauseCreated.OnPause += CreateResume;
+        _pauseCreated.OnPause += () => Destroy(_pauseCreated.gameObject);
+    }
+
+    private void CreateResume()
+    {
+        _resumeCreated = Instantiate(_resume,
+            _resumeMenuPosition.GetComponent<RectTransform>().position, 
+            Quaternion.identity,
+            _canvas.transform);
+        _resumeCreated.transform.position = _resumeMenuPosition.GetComponent<RectTransform>().position;
+        _resumeCreated.GetComponentInChildren<Resume>().Setup(_pauseService);
+        _resumeCreated.GetComponentInChildren<Resume>().OnResume += CreatePause;
+        _resumeCreated.GetComponentInChildren<Resume>().OnResume += () => Destroy(_resumeCreated.gameObject);
     }
 
     private void CreateBestScore()
@@ -160,7 +196,8 @@ public class EntryPoint : MonoBehaviour
     private void CreateRocket()
     {
         _rocketCreated = Instantiate(_rocket, _rocketStartPoint.position, Quaternion.identity);
-        _rocketCreated.Setup(_input, _moneyCounterCreated, _fuelCounterCreated);
+        _rocketCreated.Setup(_input, _moneyCounterCreated, _fuelCounterCreated, _pauseService);
+        _input.Setup(_rocketCreated);
     }
 
     private void CreateSpawners()
@@ -171,6 +208,9 @@ public class EntryPoint : MonoBehaviour
         _cloudFabricaCreated.Setup(_rocketCreated);
         _fuelFabricaCreated = Instantiate(_fuelFabrica);
         _fuelFabricaCreated.Setup(_rocketCreated);
+        _cloudFabricaCreated.GetComponent<CloudSpawner>().Setup(_pauseService);
+        _fuelFabricaCreated.GetComponent<FuelSpawner>().Setup(_pauseService);
+        _moneyFabricaCreated.GetComponent<MoneySpawner>().Setup(_pauseService);
     }
     
     private void FuelBarCreated()
@@ -178,8 +218,9 @@ public class EntryPoint : MonoBehaviour
         _fuelBarCreated = Instantiate(_fuelBar, 
             _fuelBarPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
-            _canvas.transform);
-        _fuelBarCreated.Setup(_rocketCreated);
+            null);
+        _fuelBarCreated.transform.SetParent(_canvas.transform, false);
+        _fuelBarCreated.Setup(_rocketCreated, _pauseService);
         _fuelBarCreated.transform.position = _fuelBarPosition.GetComponent<RectTransform>().position;
     }
 
@@ -213,5 +254,15 @@ public class EntryPoint : MonoBehaviour
                 _canvas.transform);
             yield return new WaitForSeconds(1);
         }
+    }
+
+    public void Pause()
+    {
+        StopCoroutine(_createWallTick);
+    }
+
+    public void Resume()
+    {
+        _createWallTick = StartCoroutine(CreateWallTick());
     }
 }

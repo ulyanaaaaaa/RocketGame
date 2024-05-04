@@ -3,12 +3,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MoneyFabrica))]
-public class MoneySpawner : MonoBehaviour
+public class MoneySpawner : MonoBehaviour, IPause
 {
     [SerializeField] private float _delay;
     private Coroutine _spawnTick;
     private KeabordInput _input;
+    private PauseService _pauseService;
     private MoneyFabrica _moneyFabrica;
+    
+    public void Setup(PauseService pauseService)
+    {
+        _pauseService = pauseService;
+    }
 
     private void Awake()
     {
@@ -18,6 +24,7 @@ public class MoneySpawner : MonoBehaviour
 
     private void Start()
     {
+        _pauseService.AddPause(this);
         _spawnTick = StartCoroutine(SpawnTick());
     }
 
@@ -28,5 +35,15 @@ public class MoneySpawner : MonoBehaviour
             yield return new WaitForSeconds(_delay);
             _moneyFabrica.CreateMoney();
         }
+    }
+    
+    public void Pause()
+    {
+        StopCoroutine(_spawnTick);
+    }
+
+    public void Resume()
+    {
+        _spawnTick = StartCoroutine(SpawnTick());
     }
 }
