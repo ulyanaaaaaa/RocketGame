@@ -23,6 +23,8 @@ public class EntryPoint : MonoBehaviour, IPause
     private ResumeMenu _resume;
     private ResumeMenu _resumeCreated;
     private KeabordInput _input;
+    private StoneFabrica _stoneFabrica;
+    private StoneFabrica _stoneFabricaCreated;
     private MoneyFabrica _moneyFabrica;
     private MoneyFabrica _moneyFabricaCreated;
     private FuelFabrica _fuelFabrica;
@@ -66,6 +68,7 @@ public class EntryPoint : MonoBehaviour, IPause
         _fuelFabrica = Resources.Load<FuelFabrica>("FuelFabrica");
         _shopSpeedItem = Resources.Load<ShopSpeedItem>("ItemSpeed");
         _shopFuelItem = Resources.Load<ShopFuelItem>("ItemFuel");
+        _stoneFabrica = Resources.Load<StoneFabrica>("StoneFabrica");
         _moneyCounter = Resources.Load<MoneyCounter>("MoneyCounter");
         _invisibleWall = Resources.Load<InvisibleWall>("InvisibleWall");
         _fuelCounter = Resources.Load<FuelCounter>("FuelCounter");
@@ -202,6 +205,8 @@ public class EntryPoint : MonoBehaviour, IPause
 
     private void CreateSpawners()
     {
+        _stoneFabricaCreated = Instantiate(_stoneFabrica);
+        _stoneFabricaCreated.Setup(_rocketCreated);
         _moneyFabricaCreated = Instantiate(_moneyFabrica);
         _moneyFabricaCreated.Setup(_rocketCreated);
         _cloudFabricaCreated = Instantiate(_cloudFabrica);
@@ -211,6 +216,7 @@ public class EntryPoint : MonoBehaviour, IPause
         _cloudFabricaCreated.GetComponent<CloudSpawner>().Setup(_pauseService);
         _fuelFabricaCreated.GetComponent<FuelSpawner>().Setup(_pauseService);
         _moneyFabricaCreated.GetComponent<MoneySpawner>().Setup(_pauseService);
+        _stoneFabricaCreated.GetComponent<StoneSpawner>().Setup(_pauseService);
     }
     
     private void FuelBarCreated()

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Patron : MonoBehaviour
 {
-    [SerializeField] private float _speed;
     private Rigidbody _rigidbody;
     private Rocket _rocket;
 
@@ -19,6 +18,6 @@ public class Patron : MonoBehaviour
 
     private void Update()
     {
-        _rigidbody.velocity = Vector3.up * (_rocket.Speed + _speed);
+        _rigidbody.velocity = Vector3.up * (_rocket.Speed + 0.5f * _rocket.Speed);
     }
 }
