@@ -16,6 +16,7 @@ public class EntryPoint : MonoBehaviour, IPause
     [SerializeField] private RectTransform _fuelBarPosition;
     [SerializeField] private RectTransform _pausePosition;
     [SerializeField] private RectTransform _resumeMenuPosition;
+    [SerializeField] private RectTransform _speedCounterPosition;
 
     private PauseService _pauseService;
     private Pause _pause;
@@ -49,6 +50,8 @@ public class EntryPoint : MonoBehaviour, IPause
     private BestScore _bestScoreCreated;
     private ScoreCounter _scoreCounter;
     private ScoreCounter _scoreCounterCreated;
+    private SpeedCounter _speedCounter;
+    private SpeedCounter _speedCounterCreated;
     private InvisibleWall _invisibleWall;
     private InvisibleWall _invisibleLeftWallCreated;
     private InvisibleWall _invisibleRightWallCreated;
@@ -59,6 +62,7 @@ public class EntryPoint : MonoBehaviour, IPause
         _pauseService = GetComponent<PauseService>();
         _input = GetComponent<KeabordInput>();
         _rocket = Resources.Load<Rocket>("Rocket");
+        _speedCounter = Resources.Load<SpeedCounter>("SpeedCounter");
         _failWindow = Resources.Load<FailWindow>("FailWindow"); 
         _fuelBar = Resources.Load<FuelBar>("FuelBar");
         _pause = Resources.Load<Pause>("Pause");
@@ -95,6 +99,18 @@ public class EntryPoint : MonoBehaviour, IPause
        CreateShopFuelItem();
        CreateSpeedFuelItem();
        CreateBestScore();
+       CreateSpeedCounter();
+    }
+
+    private void CreateSpeedCounter()
+    {
+        _speedCounterCreated = Instantiate(_speedCounter,
+            _speedCounterPosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _rocketCreated.Setup(_input, _moneyCounterCreated, _fuelCounterCreated, _pauseService, _speedCounterCreated);
+        _speedCounterCreated.transform.position = _speedCounterPosition.GetComponent<RectTransform>().position;
+        _input.OnPlay += () => Destroy(_speedCounterCreated.gameObject);
     }
 
     private void CreatePause()
@@ -199,7 +215,6 @@ public class EntryPoint : MonoBehaviour, IPause
     private void CreateRocket()
     {
         _rocketCreated = Instantiate(_rocket, _rocketStartPoint.position, Quaternion.identity);
-        _rocketCreated.Setup(_input, _moneyCounterCreated, _fuelCounterCreated, _pauseService);
         _input.Setup(_rocketCreated);
     }
 

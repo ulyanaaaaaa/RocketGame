@@ -24,9 +24,12 @@ public class Rocket : MonoBehaviour, IPause
     private float _tempSpeed;
     private ISaveService _saveService;
     private PauseService _pauseService;
+    private SpeedCounter _speedCounter;
     
-    public void Setup(KeabordInput input, MoneyCounter moneyCounter, FuelCounter fuelCounter, PauseService pauseService)
+    public void Setup(KeabordInput input, MoneyCounter moneyCounter, FuelCounter fuelCounter, PauseService pauseService,
+        SpeedCounter speedCounter)
     {
+        _speedCounter = speedCounter;
         _pauseService = pauseService;
         _input = input;
         _moneyCounter = moneyCounter;
@@ -56,9 +59,11 @@ public class Rocket : MonoBehaviour, IPause
         Fuel = MaxFuel;
         _moneyCounter.CurrentMoney(Wallet);
         _fuelCounter.CurrentMaxFuel(MaxFuel);
+        _speedCounter.CurrentSpeed(Speed);
         _rigidbody = GetComponent<Rigidbody>();
         _input.OnPlay += StartPlay;
         _input.OnShoot += Shoot;
+        OnDie += () => _pauseService.Pause();
     }
 
     private void Update()
@@ -70,6 +75,7 @@ public class Rocket : MonoBehaviour, IPause
     public void AddSpeed(float speed)
     {
         Speed += speed;
+        _speedCounter.CurrentSpeed(Speed);
     }
 
     public void AddFuel(float fuel)
@@ -174,6 +180,14 @@ public class Rocket : MonoBehaviour, IPause
                 OnDie?.Invoke();
                 break;
             }
+        }
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Stone>())
+        {
+            OnDie?.Invoke();
         }
     }
 
