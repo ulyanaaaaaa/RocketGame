@@ -49,12 +49,7 @@ public class KeabordInput : MonoBehaviour, IPause
             OnShoot?.Invoke();
         }
     }
-
-    private void Die()
-    {
-        _isPlay = false;
-    }
-
+    
     public void Pause()
     {
         _isPause = true;
@@ -63,5 +58,10 @@ public class KeabordInput : MonoBehaviour, IPause
     public void Resume()
     {
         _isPause = false;
+    }
+
+    private void Die()
+    {
+        _isPlay = false;
     }
 }

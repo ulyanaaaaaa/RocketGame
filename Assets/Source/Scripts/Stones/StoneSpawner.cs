@@ -24,6 +24,16 @@ public class StoneSpawner : MonoBehaviour, IPause
         _pauseService.AddPause(this);
         _spawnTick = StartCoroutine(SpawnTick());
     }
+    
+    public void Pause()
+    {
+        StopCoroutine(_spawnTick);
+    }
+
+    public void Resume()
+    { 
+        _spawnTick = StartCoroutine(SpawnTick());
+    }
 
     private IEnumerator SpawnTick()
     {
@@ -36,15 +46,5 @@ public class StoneSpawner : MonoBehaviour, IPause
             _stoneFabrica.CreateWidthStone();
             _stoneFabrica.CreateMiddleStone();
         }
-    }
-
-    public void Pause()
-    {
-        StopCoroutine(_spawnTick);
-    }
-
-    public void Resume()
-    { 
-        _spawnTick = StartCoroutine(SpawnTick());
     }
 }

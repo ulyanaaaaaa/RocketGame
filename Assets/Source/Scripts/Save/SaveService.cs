@@ -3,7 +3,6 @@ using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
 
-
 public class SaveService : ISaveService
 {
     public void Save(string id, object data, Action<bool> callback = null)

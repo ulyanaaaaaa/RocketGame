@@ -78,7 +78,6 @@ public class EntryPoint : MonoBehaviour, IPause
         _fuelCounter = Resources.Load<FuelCounter>(AssetsPath.FuelPath.FuelCounter);
         _bestScore = Resources.Load<BestScore>(AssetsPath.UiPath.BestScore);
         _scoreCounter = Resources.Load<ScoreCounter>(AssetsPath.UiPath.ScoreCounter);
-        Debug.Log(_rocket);
         CreateMoneyCounter();
         CreateFuelCounter();
         CreateRocket();
@@ -92,6 +91,16 @@ public class EntryPoint : MonoBehaviour, IPause
         _input.OnPlay += DisableFuel;
         _input.OnPlay += DisableBestScoreUI;
         _input.OnPlay += CreatePause;
+    }
+    
+    public void Pause()
+    {
+        StopCoroutine(_createWallTick);
+    }
+
+    public void Resume()
+    {
+        _createWallTick = StartCoroutine(CreateWallTick());
     }
 
     private void CreateUI()
@@ -276,15 +285,5 @@ public class EntryPoint : MonoBehaviour, IPause
                 _canvas.transform);
             yield return new WaitForSeconds(1);
         }
-    }
-
-    public void Pause()
-    {
-        StopCoroutine(_createWallTick);
-    }
-
-    public void Resume()
-    {
-        _createWallTick = StartCoroutine(CreateWallTick());
     }
 }

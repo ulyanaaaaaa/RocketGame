@@ -13,6 +13,16 @@ public class CloudSpawner : MonoBehaviour, IPause
    {
       _pauseService = pauseService;
    }
+   
+   public void Pause()
+   {
+      StopCoroutine(_spawnTick);
+   }
+
+   public void Resume()
+   { 
+      _spawnTick = StartCoroutine(SpawnTick());
+   }
 
    private void Awake()
    {
@@ -34,15 +44,5 @@ public class CloudSpawner : MonoBehaviour, IPause
          _cloudFabrica.CreateBigCloud();
          _cloudFabrica.CreateSmallCloud();
       }
-   }
-
-   public void Pause()
-   {
-      StopCoroutine(_spawnTick);
-   }
-
-   public void Resume()
-   { 
-      _spawnTick = StartCoroutine(SpawnTick());
    }
 }

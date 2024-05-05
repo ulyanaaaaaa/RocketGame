@@ -25,15 +25,6 @@ public class MoneySpawner : MonoBehaviour, IPause
         _pauseService.AddPause(this);
         _spawnTick = StartCoroutine(SpawnTick());
     }
-
-    private IEnumerator SpawnTick()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(_delay);
-            _moneyFabrica.CreateMoney();
-        }
-    }
     
     public void Pause()
     {
@@ -43,5 +34,14 @@ public class MoneySpawner : MonoBehaviour, IPause
     public void Resume()
     {
         _spawnTick = StartCoroutine(SpawnTick());
+    }
+
+    private IEnumerator SpawnTick()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(_delay);
+            _moneyFabrica.CreateMoney();
+        }
     }
 }

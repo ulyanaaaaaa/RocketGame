@@ -24,16 +24,7 @@ public class FuelSpawner : MonoBehaviour, IPause
         _pauseService.AddPause(this);
         _spawnTick = StartCoroutine(SpawnTick());
     }
-
-    private IEnumerator SpawnTick()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(_delay);
-            _fuelFabrica.CreateFuel();
-        }
-    }
-
+    
     public void Pause()
     {
         StopCoroutine(_spawnTick);
@@ -42,5 +33,14 @@ public class FuelSpawner : MonoBehaviour, IPause
     public void Resume()
     {
         _spawnTick = StartCoroutine(SpawnTick());
+    }
+
+    private IEnumerator SpawnTick()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(_delay);
+            _fuelFabrica.CreateFuel();
+        }
     }
 }
