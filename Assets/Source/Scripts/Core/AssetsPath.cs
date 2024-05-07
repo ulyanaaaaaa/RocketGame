@@ -9,6 +9,7 @@ public static class AssetsPath
         public static string ResumeMenu = "UI/ResumeMenu";
         public static string ScoreCounter = "UI/ScoreCounter";
         public static string SpeedCounter = "UI/SpeedCounter";
+        public static string Menu = "UI/Menu";
     }
     
     public static class CloudsPath

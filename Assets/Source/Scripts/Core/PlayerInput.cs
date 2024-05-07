@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class KeabordInput : MonoBehaviour, IPause
+public class PlayerInput : MonoBehaviour, IPause
 {
     public Action OnRightClicked;
     public Action OnLeftClicked;
@@ -47,6 +47,15 @@ public class KeabordInput : MonoBehaviour, IPause
         if (Input.GetKeyDown(KeyCode.W) && _isPlay)
         {
             OnShoot?.Invoke();
+        }
+
+        foreach (Touch touch in Input.touches)
+        {
+            if (touch.tapCount == 2)
+                OnPlay?.Invoke();
+
+            if (touch.tapCount == 1)
+                OnShoot?.Invoke();
         }
     }
     

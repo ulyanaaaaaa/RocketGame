@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MaxFuel>k__BackingField: 50
   <Fuel>k__BackingField: 50
+  <Speed>k__BackingField: 30
   _patronSpawnPosition: {fileID: 6332588597007124869}
 --- !u!1 &6648924534262952623
 GameObject:

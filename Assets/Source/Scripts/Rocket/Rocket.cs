@@ -10,28 +10,31 @@ public class Rocket : MonoBehaviour, IPause
     [field: SerializeField] public float MaxFuel { get; private set; }
     [field: SerializeField] public float Fuel { get; private set; }
     public int Wallet { get; private set; }
-    public float Speed{ get; private set; }
+    [field:SerializeField] public float Speed{ get; private set; }
 
     [SerializeField] private Transform _patronSpawnPosition;
     private string _id = "rocket";
     private Rigidbody _rigidbody;
     private Patron _patron;
-    private KeabordInput _input;
+    private PlayerInput _playerInput;
     private Coroutine _fuelTick;
     private MoneyCounter _moneyCounter;
     private FuelCounter _fuelCounter;
     private bool _isPlay;
     private float _tempSpeed;
+    private bool _canShoot = true;
     private ISaveService _saveService;
     private PauseService _pauseService;
     private SpeedCounter _speedCounter;
+    private Vector3 touchPosition;
+    private bool isDragging = false;
     
-    public void Setup(KeabordInput input, MoneyCounter moneyCounter, FuelCounter fuelCounter, PauseService pauseService,
-        SpeedCounter speedCounter)
+    public void Setup(PlayerInput playerInput, MoneyCounter moneyCounter, FuelCounter fuelCounter, 
+        PauseService pauseService, SpeedCounter speedCounter)
     {
         _speedCounter = speedCounter;
         _pauseService = pauseService;
-        _input = input;
+        _playerInput = playerInput;
         _moneyCounter = moneyCounter;
         _fuelCounter = fuelCounter;
     }
@@ -61,15 +64,53 @@ public class Rocket : MonoBehaviour, IPause
         _fuelCounter.CurrentMaxFuel(MaxFuel);
         _speedCounter.CurrentSpeed(Speed);
         _rigidbody = GetComponent<Rigidbody>();
-        _input.OnPlay += StartPlay;
-        _input.OnShoot += Shoot;
+        _playerInput.OnPlay += StartPlay;
+        _playerInput.OnShoot += Shoot;
         OnDie += () => _pauseService.Pause();
     }
 
     private void Update()
     {
         if (_isPlay)
+        {
             _rigidbody.velocity = Vector3.up * Speed;
+            
+            if (UnityEngine.Input.touchCount > 0)
+            {
+                Touch touch = UnityEngine.Input.GetTouch(0);
+
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        touchPosition = touch.position;
+                        isDragging = true;
+                        break;
+                    case TouchPhase.Moved:
+                        touchPosition = touch.position;
+                        break;
+                    case TouchPhase.Ended:
+                        isDragging = false;
+                        break;
+                }
+            }
+            else
+            {
+                isDragging = false;
+            }
+        }
+    }
+    
+    private void FixedUpdate()
+    {
+        if (isDragging)
+        {
+            Vector3 direction = (touchPosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
+            _rigidbody.velocity = new Vector3(direction.x * Speed, _rigidbody.velocity.y, 0f);
+        }
+        else
+        {
+            _rigidbody.velocity = new Vector3(0f, _rigidbody.velocity.y, 0f); 
+        }
     }
     
     public void AddSpeed(float speed)
@@ -102,15 +143,26 @@ public class Rocket : MonoBehaviour, IPause
 
     private void StartPlay()
     {
-        _input.OnLeftClicked += TurnLeft;
-        _input.OnRightClicked += TurnRight;
+        _playerInput.OnLeftClicked += TurnLeft;
+        _playerInput.OnRightClicked += TurnRight;
         _isPlay = true;
         _fuelTick = StartCoroutine(FuelTick());
     }
 
     private void Shoot()
     {
-        Instantiate(_patron, _patronSpawnPosition.position, Quaternion.identity).Setup(this);
+        if (_canShoot && _isPlay)
+        {
+            Instantiate(_patron, _patronSpawnPosition.position, Quaternion.identity).Setup(this);
+            StartCoroutine(ShootTick());
+        }
+    }
+
+    private IEnumerator ShootTick()
+    {
+        _canShoot = false;
+        yield return new WaitForSeconds(0.3f);
+        _canShoot = true;
     }
     
     private void TurnLeft()

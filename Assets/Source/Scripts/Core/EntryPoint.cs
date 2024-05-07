@@ -8,22 +8,18 @@ public class EntryPoint : MonoBehaviour, IPause
 
     [SerializeField] private RectTransform _fuelShopPosition;
     [SerializeField] private RectTransform _speedShopPosition;
-    [SerializeField] private RectTransform _bestScorePosition;
-    [SerializeField] private RectTransform _moneyCounterPosition;
-    [SerializeField] private RectTransform _maxFuelPosition;
     [SerializeField] private RectTransform _scoreCounterPosition;
-    [SerializeField] private RectTransform _fuelCounterPosition;
     [SerializeField] private RectTransform _fuelBarPosition;
     [SerializeField] private RectTransform _pausePosition;
     [SerializeField] private RectTransform _resumeMenuPosition;
-    [SerializeField] private RectTransform _speedCounterPosition;
-
+    [SerializeField] private RectTransform _menuPosition;
+    
     private PauseService _pauseService;
     private Pause _pause;
     private Pause _pauseCreated;
     private ResumeMenu _resume;
     private ResumeMenu _resumeCreated;
-    private KeabordInput _input;
+    private PlayerInput _playerInput;
     private StoneFabrica _stoneFabrica;
     private StoneFabrica _stoneFabricaCreated;
     private MoneyFabrica _moneyFabrica;
@@ -56,11 +52,14 @@ public class EntryPoint : MonoBehaviour, IPause
     private InvisibleWall _invisibleLeftWallCreated;
     private InvisibleWall _invisibleRightWallCreated;
     private Coroutine _createWallTick;
+    private Menu _menu;
+    private Menu _menuCreated;
 
     private void Awake()
     {
         _pauseService = GetComponent<PauseService>();
-        _input = GetComponent<KeabordInput>();
+        _playerInput = GetComponent<PlayerInput>();
+        _menu = Resources.Load<Menu>(AssetsPath.UiPath.Menu);
         _rocket = Resources.Load<Rocket>(AssetsPath.RocketPath.Rocket);
         _speedCounter = Resources.Load<SpeedCounter>(AssetsPath.UiPath.SpeedCounter);
         _failWindow = Resources.Load<FailWindow>(AssetsPath.UiPath.FailWindow); 
@@ -78,19 +77,16 @@ public class EntryPoint : MonoBehaviour, IPause
         _fuelCounter = Resources.Load<FuelCounter>(AssetsPath.FuelPath.FuelCounter);
         _bestScore = Resources.Load<BestScore>(AssetsPath.UiPath.BestScore);
         _scoreCounter = Resources.Load<ScoreCounter>(AssetsPath.UiPath.ScoreCounter);
-        CreateMoneyCounter();
-        CreateFuelCounter();
         CreateRocket();
         CreateUI();
         _pauseService.AddPause(this);
-        _input.OnPlay += CreateSpawners;
-        _input.OnPlay += CreateScoreCounter;
-        _input.OnPlay += DisableShop;
-        _input.OnPlay += FuelBarCreated;
-        _input.OnPlay += CreateInvisibleWall;
-        _input.OnPlay += DisableFuel;
-        _input.OnPlay += DisableBestScoreUI;
-        _input.OnPlay += CreatePause;
+        _playerInput.OnPlay += CreateSpawners;
+        _playerInput.OnPlay += CreateScoreCounter;
+        _playerInput.OnPlay += DisableShop;
+        _playerInput.OnPlay += FuelBarCreated;
+        _playerInput.OnPlay += CreateInvisibleWall;
+        _playerInput.OnPlay += DisableMenu;
+        _playerInput.OnPlay += CreatePause;
     }
     
     public void Pause()
@@ -108,19 +104,21 @@ public class EntryPoint : MonoBehaviour, IPause
        CreateFailWindow();
        CreateShopFuelItem();
        CreateSpeedFuelItem();
-       CreateBestScore();
-       CreateSpeedCounter();
+       CreateMenu();
     }
 
-    private void CreateSpeedCounter()
+    private void CreateMenu()
     {
-        _speedCounterCreated = Instantiate(_speedCounter,
-            _speedCounterPosition.GetComponent<RectTransform>().position,
+        _menuCreated = Instantiate(_menu,
+            _menuPosition.GetComponent<RectTransform>().position,
             Quaternion.identity,
             _canvas.transform);
-        _rocketCreated.Setup(_input, _moneyCounterCreated, _fuelCounterCreated, _pauseService, _speedCounterCreated);
-        _speedCounterCreated.transform.position = _speedCounterPosition.GetComponent<RectTransform>().position;
-        _input.OnPlay += () => Destroy(_speedCounterCreated.gameObject);
+        _menuCreated.transform.position = _menuPosition.GetComponent<RectTransform>().position;
+        _menuCreated.GetComponentInChildren<BestScore>().Setup(_rocketCreated);
+        _rocketCreated.Setup(_playerInput, _menuCreated.GetComponentInChildren<MoneyCounter>(),
+            _menuCreated.GetComponentInChildren<FuelCounter>(),
+            _pauseService,
+            _menuCreated.GetComponentInChildren<SpeedCounter>());
     }
 
     private void CreatePause()
@@ -146,16 +144,7 @@ public class EntryPoint : MonoBehaviour, IPause
         _resumeCreated.GetComponentInChildren<Resume>().OnResume += CreatePause;
         _resumeCreated.GetComponentInChildren<Resume>().OnResume += () => Destroy(_resumeCreated.gameObject);
     }
-
-    private void CreateBestScore()
-    {
-        _bestScoreCreated = Instantiate(_bestScore,
-            _bestScorePosition.GetComponent<RectTransform>().position,
-            Quaternion.identity,
-            _canvas.transform);
-        _bestScoreCreated.Setup(_rocketCreated);
-        _bestScoreCreated.transform.position = _bestScorePosition.GetComponent<RectTransform>().position;
-    }
+    
 
     private void CreateScoreCounter()
     {
@@ -198,25 +187,7 @@ public class EntryPoint : MonoBehaviour, IPause
         _shopFuelItemCreated.GetComponent<ShopFuelItemViewer>().Setup(_rocketCreated);
         _shopFuelItemCreated.transform.position = _fuelShopPosition.GetComponent<RectTransform>().position;
     }
-
-    private void CreateFuelCounter()
-    {
-        _fuelCounterCreated = Instantiate(_fuelCounter,
-            _fuelCounterPosition.GetComponent<RectTransform>().position, 
-            Quaternion.identity, 
-            _canvas.transform);
-        _fuelCounterCreated.transform.position = _fuelCounterPosition.GetComponent<RectTransform>().position;
-    }
-
-    private void CreateMoneyCounter()
-    {
-        _moneyCounterCreated = Instantiate(_moneyCounter,
-            _moneyCounterPosition.GetComponent<RectTransform>().position, 
-            Quaternion.identity, 
-            _canvas.transform);
-        _moneyCounterCreated.transform.position = _moneyCounterPosition.GetComponent<RectTransform>().position;
-    }
-
+    
     private void CreateInvisibleWall()
     {
         _createWallTick = StartCoroutine(CreateWallTick());
@@ -225,7 +196,7 @@ public class EntryPoint : MonoBehaviour, IPause
     private void CreateRocket()
     {
         _rocketCreated = Instantiate(_rocket, _rocketStartPoint.position, Quaternion.identity);
-        _input.Setup(_rocketCreated);
+        _playerInput.Setup(_rocketCreated);
     }
 
     private void CreateSpawners()
@@ -261,14 +232,9 @@ public class EntryPoint : MonoBehaviour, IPause
         _shopFuelItemCreated.gameObject.SetActive(false);
     }
 
-    private void DisableFuel()
+    private void DisableMenu()
     {
-        _fuelCounterCreated.gameObject.SetActive(false);
-    }
-    
-    private void DisableBestScoreUI()
-    {
-        _bestScoreCreated.gameObject.SetActive(false);
+        _menuCreated.gameObject.SetActive(false);
     }
     
     private IEnumerator CreateWallTick()

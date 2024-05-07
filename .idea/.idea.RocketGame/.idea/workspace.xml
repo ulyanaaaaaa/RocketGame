@@ -11,12 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pause/IPause.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pause/PauseService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Save/ISaveService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Stones/StoneFabrica.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/FuelCounter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Resume.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Scripts/Core/SwipeDetection.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -111,7 +106,10 @@
       <workItem from="1714823676983" duration="6008000" />
       <workItem from="1714847425562" duration="10808000" />
       <workItem from="1714920537296" duration="1907000" />
-      <workItem from="1714934050046" duration="3084000" />
+      <workItem from="1714934050046" duration="3444000" />
+      <workItem from="1714999623521" duration="2581000" />
+      <workItem from="1715029561067" duration="1424000" />
+      <workItem from="1715100129970" duration="3587000" />
     </task>
     <servers />
   </component>
