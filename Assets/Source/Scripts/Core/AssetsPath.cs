@@ -10,6 +10,7 @@ public static class AssetsPath
         public static string ScoreCounter = "UI/ScoreCounter";
         public static string SpeedCounter = "UI/SpeedCounter";
         public static string Menu = "UI/Menu";
+        public static string Inscription = "UI/PlayInscription";
     }
     
     public static class CloudsPath

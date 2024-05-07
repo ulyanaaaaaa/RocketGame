@@ -13,7 +13,10 @@ public class EntryPoint : MonoBehaviour, IPause
     [SerializeField] private RectTransform _pausePosition;
     [SerializeField] private RectTransform _resumeMenuPosition;
     [SerializeField] private RectTransform _menuPosition;
-    
+    [SerializeField] private RectTransform _inscriptionPosition;
+
+    private PlayInscription _inscription;
+    private PlayInscription _inscriptionCreated;
     private PauseService _pauseService;
     private Pause _pause;
     private Pause _pauseCreated;
@@ -60,6 +63,7 @@ public class EntryPoint : MonoBehaviour, IPause
         _pauseService = GetComponent<PauseService>();
         _playerInput = GetComponent<PlayerInput>();
         _menu = Resources.Load<Menu>(AssetsPath.UiPath.Menu);
+        _inscription = Resources.Load<PlayInscription>(AssetsPath.UiPath.Inscription);
         _rocket = Resources.Load<Rocket>(AssetsPath.RocketPath.Rocket);
         _speedCounter = Resources.Load<SpeedCounter>(AssetsPath.UiPath.SpeedCounter);
         _failWindow = Resources.Load<FailWindow>(AssetsPath.UiPath.FailWindow); 
@@ -105,6 +109,16 @@ public class EntryPoint : MonoBehaviour, IPause
        CreateShopFuelItem();
        CreateSpeedFuelItem();
        CreateMenu();
+       CreateInscription();
+    }
+
+    private void CreateInscription()
+    {
+        _inscriptionCreated = Instantiate(_inscription,
+            _inscriptionPosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _inscriptionCreated.transform.position = _inscriptionPosition.GetComponent<RectTransform>().position;
     }
 
     private void CreateMenu()
@@ -235,6 +249,7 @@ public class EntryPoint : MonoBehaviour, IPause
     private void DisableMenu()
     {
         _menuCreated.gameObject.SetActive(false);
+        _inscriptionCreated.gameObject.SetActive(false);
     }
     
     private IEnumerator CreateWallTick()

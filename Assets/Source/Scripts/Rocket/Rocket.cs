@@ -23,11 +23,12 @@ public class Rocket : MonoBehaviour, IPause
     private bool _isPlay;
     private float _tempSpeed;
     private bool _canShoot = true;
+    private bool _isPause;
     private ISaveService _saveService;
     private PauseService _pauseService;
     private SpeedCounter _speedCounter;
     private Vector3 touchPosition;
-    private bool isDragging = false;
+    private bool isDragging;
     
     public void Setup(PlayerInput playerInput, MoneyCounter moneyCounter, FuelCounter fuelCounter, 
         PauseService pauseService, SpeedCounter speedCounter)
@@ -71,37 +72,46 @@ public class Rocket : MonoBehaviour, IPause
 
     private void Update()
     {
-        if (_isPlay)
-        {
-            _rigidbody.velocity = Vector3.up * Speed;
-            
-            if (UnityEngine.Input.touchCount > 0)
-            {
-                Touch touch = UnityEngine.Input.GetTouch(0);
+        if (!_isPlay)
+            return;
+        if (_isPause)
+            return;
 
-                switch (touch.phase)
-                {
-                    case TouchPhase.Began:
-                        touchPosition = touch.position;
-                        isDragging = true;
-                        break;
-                    case TouchPhase.Moved:
-                        touchPosition = touch.position;
-                        break;
-                    case TouchPhase.Ended:
-                        isDragging = false;
-                        break;
-                }
-            }
-            else
+        _rigidbody.velocity = Vector3.up * Speed;
+
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            switch (touch.phase)
             {
-                isDragging = false;
+                case TouchPhase.Began:
+                    touchPosition = touch.position;
+                    isDragging = true;
+                    break;
+                case TouchPhase.Moved:
+                    touchPosition = touch.position;
+                    break;
+                case TouchPhase.Ended:
+                    isDragging = false;
+                    break;
             }
         }
+        else
+        {
+            isDragging = false;
+
+        }
     }
-    
+
     private void FixedUpdate()
     {
+        if (!_isPlay)
+            return;
+
+        if (_isPause)
+            return;
+        
         if (isDragging)
         {
             Vector3 direction = (touchPosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
@@ -245,6 +255,7 @@ public class Rocket : MonoBehaviour, IPause
 
     public void Pause()
     {
+        _isPause = true;
         _rigidbody.constraints = RigidbodyConstraints.FreezePositionX;
         _rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
         StopCoroutine(_fuelTick);
@@ -252,6 +263,7 @@ public class Rocket : MonoBehaviour, IPause
 
     public void Resume()
     {
+        _isPause = false;
         _rigidbody.constraints = RigidbodyConstraints.None;
         _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
