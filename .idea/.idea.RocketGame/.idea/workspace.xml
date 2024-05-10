@@ -11,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Scripts/Core/SwipeDetection.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Scripts/Core/Translate/Translator.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -110,6 +110,10 @@
       <workItem from="1714999623521" duration="2581000" />
       <workItem from="1715029561067" duration="1424000" />
       <workItem from="1715100129970" duration="5697000" />
+      <workItem from="1715170988046" duration="609000" />
+      <workItem from="1715188879957" duration="3387000" />
+      <workItem from="1715259016705" duration="403000" />
+      <workItem from="1715363616253" duration="5363000" />
     </task>
     <servers />
   </component>

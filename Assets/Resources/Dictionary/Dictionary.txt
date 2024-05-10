@@ -1,0 +1,13 @@
+id	Ru	Eng
+price	цена:	price:
+add_fuel	Плюс топливо	Add fuel:
+add_speed	Плюс скорость	Add speed:
+money	Монеты:	Money:
+speed	Скорость:	Speed:
+max_fuel	Макс топливо:	Max fuel:
+best_height	Лучшая высота:	Best height:
+inscreption	Нажмите W, чтобы играть на клавиатуре, или дважды коснитесь экрана	Tap W to play on keyboardor double-tap on screen
+height	Высота:	Height:
+restart	Рестарт	Restart
+resume	Продолжить	Resume
+attention	Внимание! Ваши монеты и высота не сохранятся!	Attention! Your money and height will not be saved!

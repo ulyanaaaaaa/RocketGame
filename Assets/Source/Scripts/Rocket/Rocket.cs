@@ -43,6 +43,7 @@ public class Rocket : MonoBehaviour, IPause
     private void Awake()
     {
         _patron = Resources.Load<Patron>(AssetsPath.RocketPath.Patron);
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void Start()
@@ -61,12 +62,13 @@ public class Rocket : MonoBehaviour, IPause
             Load(); 
         
         Fuel = MaxFuel;
-        _moneyCounter.CurrentMoney(Wallet);
-        _fuelCounter.CurrentMaxFuel(MaxFuel);
-        _speedCounter.CurrentSpeed(Speed);
-        _rigidbody = GetComponent<Rigidbody>();
+        _moneyCounter.CurrentMoney();
+        _fuelCounter.CurrentMaxFuel();
+        _speedCounter.CurrentSpeed();
         _playerInput.OnPlay += StartPlay;
         _playerInput.OnShoot += Shoot;
+        _playerInput.OnLeftClicked += TurnLeft;
+        _playerInput.OnRightClicked += TurnRight;
         OnDie += () => _pauseService.Pause();
     }
 
@@ -78,29 +80,31 @@ public class Rocket : MonoBehaviour, IPause
             return;
 
         _rigidbody.velocity = Vector3.up * Speed;
-
-        if (Input.touchCount > 0)
+        
+        if (Application.isMobilePlatform)
         {
-            Touch touch = Input.GetTouch(0);
-
-            switch (touch.phase)
+            if (Input.touchCount > 0)
             {
-                case TouchPhase.Began:
-                    touchPosition = touch.position;
-                    isDragging = true;
-                    break;
-                case TouchPhase.Moved:
-                    touchPosition = touch.position;
-                    break;
-                case TouchPhase.Ended:
-                    isDragging = false;
-                    break;
-            }
-        }
-        else
-        {
-            isDragging = false;
+                Touch touch = Input.GetTouch(0);
 
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        touchPosition = touch.position;
+                        isDragging = true;
+                        break;
+                    case TouchPhase.Moved:
+                        touchPosition = touch.position;
+                        break;
+                    case TouchPhase.Ended:
+                        isDragging = false;
+                        break;
+                }
+            }
+            else
+            {
+                isDragging = false;
+            }
         }
     }
 
@@ -112,27 +116,30 @@ public class Rocket : MonoBehaviour, IPause
         if (_isPause)
             return;
         
-        if (isDragging)
+        if (Application.isMobilePlatform)
         {
-            Vector3 direction = (touchPosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
-            _rigidbody.velocity = new Vector3(direction.x * Speed, _rigidbody.velocity.y, 0f);
-        }
-        else
-        {
-            _rigidbody.velocity = new Vector3(0f, _rigidbody.velocity.y, 0f); 
+            if (isDragging)
+            {
+                Vector3 direction = (touchPosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
+                _rigidbody.velocity = new Vector3(direction.x * Speed, _rigidbody.velocity.y, 0f);
+            }
+            else
+            {
+                _rigidbody.velocity = new Vector3(0f, _rigidbody.velocity.y, 0f);
+            }
         }
     }
     
     public void AddSpeed(float speed)
     {
         Speed += speed;
-        _speedCounter.CurrentSpeed(Speed);
+        _speedCounter.CurrentSpeed();
     }
 
     public void AddFuel(float fuel)
     {
         MaxFuel += fuel;
-        _fuelCounter.CurrentMaxFuel(MaxFuel);
+        _fuelCounter.CurrentMaxFuel();
     }
 
     public bool TrySpend(int amount)
@@ -210,7 +217,7 @@ public class Rocket : MonoBehaviour, IPause
             throw new ArgumentException("Value must be positive!");
         
         Wallet -= amount;
-        _moneyCounter.CurrentMoney(Wallet);
+        _moneyCounter.CurrentMoney();
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -218,7 +225,7 @@ public class Rocket : MonoBehaviour, IPause
         if (collider.gameObject.TryGetComponent(out Money money))
         {
             Wallet += money.Resources;
-            _moneyCounter.CurrentMoney(Wallet);
+            _moneyCounter.CurrentMoney();
             money.gameObject.SetActive(false);
         }
         

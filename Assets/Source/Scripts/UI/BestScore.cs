@@ -2,13 +2,15 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
+[RequireComponent(typeof(TextTranslator))]
 public class BestScore : MonoBehaviour
 {
-    private string _id = "best_score";
-    private float _bestScore;
     private TextMeshProUGUI _text;
     private Rocket _rocket;
+    private TextTranslator _textTranslator;
     private ISaveService _saveService;
+    private string _id = "best_height";
+    private float _bestScore;
 
     public void Setup(Rocket rocket)
     {
@@ -18,12 +20,14 @@ public class BestScore : MonoBehaviour
     private void Awake()
     {
         _text = GetComponent<TextMeshProUGUI>();
+        _textTranslator = GetComponent<TextTranslator>();
     }
 
     private void Start()
     {
         _saveService = new SaveService();
         _rocket.OnDie += () => SetBestScore(_rocket.transform.position.y);
+        _textTranslator.TranslateText += UpdateCounter;
 
         if (!_saveService.Exists(_id))
         {
@@ -64,7 +68,7 @@ public class BestScore : MonoBehaviour
 
     private void UpdateCounter()
     {
-        _text.text = _text.text = "Best height: " + _bestScore;
+        _text.text = _textTranslator.Translate(_id) + _bestScore;
     }
 }
 

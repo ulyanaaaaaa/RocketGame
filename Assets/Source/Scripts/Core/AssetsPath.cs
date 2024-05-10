@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public static class AssetsPath
 {
     public static class UiPath
@@ -10,7 +12,14 @@ public static class AssetsPath
         public static string ScoreCounter = "UI/ScoreCounter";
         public static string SpeedCounter = "UI/SpeedCounter";
         public static string Menu = "UI/Menu";
+        public static string TranslateButton = "UI/TranslateButton";
         public static string Inscription = "UI/PlayInscription";
+        public static string LanguageMenu = "UI/LanguageMenu";
+    }
+
+    public static class DictionaryPath
+    {
+        public static string Dictionary = "Dictionary/Dictionary";
     }
     
     public static class CloudsPath

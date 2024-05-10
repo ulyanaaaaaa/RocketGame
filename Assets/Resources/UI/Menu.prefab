@@ -65,6 +65,7 @@ GameObject:
   - component: {fileID: 2791544190700764086}
   - component: {fileID: 6941860649005544865}
   - component: {fileID: 7238623423923480527}
+  - component: {fileID: 2172336720110434025}
   m_Layer: 5
   m_Name: SpeedCounter
   m_TagString: Untagged
@@ -201,6 +202,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96d00e729a7e6e489904aea1cb9c453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2172336720110434025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901406413255717399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d7754337516a141a4f0c18c3680c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _language: 0
+  _translator: {fileID: 0}
+  Id: 
+  _notTranslateOnStart: 1
 --- !u!1 &3021310853331971322
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,6 +230,7 @@ GameObject:
   - component: {fileID: 3021310853331971326}
   - component: {fileID: 3021310853331971321}
   - component: {fileID: 3021310853331971320}
+  - component: {fileID: 3474346791284342170}
   m_Layer: 5
   m_Name: FuelCounter
   m_TagString: Untagged
@@ -349,6 +367,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09588f9360c0a594eaae8f539307772a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3474346791284342170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3021310853331971322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d7754337516a141a4f0c18c3680c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _language: 0
+  _translator: {fileID: 0}
+  Id: 
+  _notTranslateOnStart: 1
 --- !u!1 &5385199496606191067
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,6 +395,7 @@ GameObject:
   - component: {fileID: 5385199496606191071}
   - component: {fileID: 5385199496606191064}
   - component: {fileID: 8670387230849569574}
+  - component: {fileID: 2114542655012444535}
   m_Layer: 5
   m_Name: MoneyCounter
   m_TagString: Untagged
@@ -497,6 +532,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f8109327189c444a9c1aca24c5df24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2114542655012444535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5385199496606191067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d7754337516a141a4f0c18c3680c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _language: 0
+  _translator: {fileID: 0}
+  Id: 
+  _notTranslateOnStart: 1
 --- !u!1 &7679147343198024316
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,6 +560,7 @@ GameObject:
   - component: {fileID: 5180646034422950072}
   - component: {fileID: 7628716826493738863}
   - component: {fileID: 6265814253508303783}
+  - component: {fileID: 4146826835323682608}
   m_Layer: 5
   m_Name: BestScore
   m_TagString: Untagged
@@ -645,3 +697,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556e596f37dea754c96d8bb614335ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4146826835323682608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7679147343198024316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d7754337516a141a4f0c18c3680c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _language: 0
+  _translator: {fileID: 0}
+  Id: 
+  _notTranslateOnStart: 1
