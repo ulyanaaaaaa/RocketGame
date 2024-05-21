@@ -1,20 +1,16 @@
-using System.Collections.Generic;
-
 public static class AssetsPath
 {
     public static class UiPath
-    {
-        public static string BestScore = "UI/BestScore";
+    { 
         public static string FailWindow = "UI/FailWindow";
         public static string Pause = "UI/Pause";
-        public static string Restart = "UI/Restart";
         public static string ResumeMenu = "UI/ResumeMenu";
         public static string ScoreCounter = "UI/ScoreCounter";
-        public static string SpeedCounter = "UI/SpeedCounter";
         public static string Menu = "UI/Menu";
         public static string TranslateButton = "UI/TranslateButton";
         public static string Inscription = "UI/PlayInscription";
         public static string LanguageMenu = "UI/LanguageMenu";
+        public static string MoneyInfo = "UI/MoneyInfo";
     }
 
     public static class DictionaryPath
@@ -44,7 +40,6 @@ public static class AssetsPath
     {
         public static string Fuel = "Fuel/Fuel";
         public static string FuelBar = "Fuel/FuelBar";
-        public static string FuelCounter = "Fuel/FuelCounter";
         public static string FuelFabrica = "Fuel/FuelFabrica";
     }
     
@@ -52,19 +47,23 @@ public static class AssetsPath
     {
         public static string ItemFuel = "Shop/ItemFuel";
         public static string ItemSpeed = "Shop/ItemSpeed";
+        public static string ItemAds = "Shop/ItemAds";
     }
     
     public static class RocketPath
     {
         public static string Patron = "Rocket/Patron";
         public static string Rocket = "Rocket/Rocket";
+        public static string RedRocket = "Rocket/RedRocket";
+        public static string BlackRocket = "Rocket/BlackRocket";
+        public static string MetalRocket = "Rocket/MetalRocket";
     }
     
     public static class MoneyPath
     {
         public static string Money = "Money/Money";
-        public static string MoneyCounter = "Money/MoneyCounter";
         public static string MoneyFabrica = "Money/MoneyFabrica";
+        public static string MoneyCounter = "Money/MoneyCounter";
     }
     
     public static class EnvironmentPath

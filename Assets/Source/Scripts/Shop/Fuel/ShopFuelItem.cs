@@ -40,8 +40,8 @@ public class ShopFuelItem : MonoBehaviour
         if (_rocket.TrySpend(Price))
         {
             _rocket.AddFuel(Fuel);
-            Price *= 2;
-            Fuel *= 1.1f;
+            Price *= 10;
+            Fuel *= 1.01f;
             OnUpdate?.Invoke();
             Save();
         }

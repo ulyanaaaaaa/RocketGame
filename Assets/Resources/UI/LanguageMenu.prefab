@@ -121,7 +121,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7057408156313560066}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7574415790940236954}
+        m_TargetAssemblyTypeName: LanguageMenu, Assembly-CSharp
+        m_MethodName: RussianClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7057408156415870387
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,7 +492,6 @@ GameObject:
   - component: {fileID: 7057408156893471682}
   - component: {fileID: 7057408156893471681}
   - component: {fileID: 7057408156893471680}
-  - component: {fileID: 5786804138774157391}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -590,9 +601,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5786804138774157391}
-        m_TargetAssemblyTypeName: ExitButton, Assembly-CSharp
-        m_MethodName: Click
+      - m_Target: {fileID: 7574415790940236954}
+        m_TargetAssemblyTypeName: LanguageMenu, Assembly-CSharp
+        m_MethodName: Exit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -602,18 +613,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5786804138774157391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7057408156893471550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6252411a8026838459797afaa90ad953, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7057408157108017984
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,6 +666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db56566e66e5d94a864689b3997d683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Translator: {fileID: 0}
 --- !u!1 &7057408157270283377
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,4 +788,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7057408157270283380}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7574415790940236954}
+        m_TargetAssemblyTypeName: LanguageMenu, Assembly-CSharp
+        m_MethodName: EnglishClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(ShopSpeedItem))]
+[RequireComponent(typeof(TextTranslator))]
 public class ShopSpeedItemViewer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _price;
@@ -11,6 +12,7 @@ public class ShopSpeedItemViewer : MonoBehaviour
     [SerializeField] private Image _background;
     private ShopSpeedItem _item;
     private Rocket _rocket;
+    private TextTranslator _textTranslator;
 
     public void Setup(Rocket rocket)
     {
@@ -19,8 +21,14 @@ public class ShopSpeedItemViewer : MonoBehaviour
 
     private void Awake()
     {
+        _textTranslator = GetComponent<TextTranslator>();
         _item = GetComponent<ShopSpeedItem>();
+    }
+
+    private void Start()
+    {
         UpdateInfo();
+        _textTranslator.TranslateText += UpdateInfo;
         _item.OnUpdate += UpdateInfo;
     }
 
@@ -38,8 +46,8 @@ public class ShopSpeedItemViewer : MonoBehaviour
 
     private void UpdateInfo()
     {
-        _price.text = $"Price: {_item.Price}";
+        _price.text = _textTranslator.Translate("price") + " " + _item.Price;
         _description.text = " ";
-        _description.text = $"Add speed: {Math.Round(_item.Speed, 1)}";
+        _description.text = _textTranslator.Translate("add_speed") + " " + "+" +Math.Round(_item.Speed, 1);
     }
 }

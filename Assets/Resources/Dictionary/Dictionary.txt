@@ -11,3 +11,14 @@ height	Высота:	Height:
 restart	Рестарт	Restart
 resume	Продолжить	Resume
 attention	Внимание! Ваши монеты и высота не сохранятся!	Attention! Your money and height will not be saved!
+money_ads	Монеты: +10 000	Money: +10 000
+watch_ads	Смотреть рекламу	Watch ads
+watch_resume	Смотреть рекламу для продолжения	Watch ads to continue
+loose	ВЫ ПРОИГРАЛИ!	YOU LOOSE!
+money_info	-монетки	-money
+fuel_info	-топливо	-fuel
+
+
+
+
+

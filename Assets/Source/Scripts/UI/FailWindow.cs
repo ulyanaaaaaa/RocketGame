@@ -12,7 +12,7 @@ public class FailWindow : MonoBehaviour
         rocket.OnDie += Open;
     }
 
-    private void Awake()
+    private void Start()
     {
         _restart.onClick.AddListener(Restart);
         _window.SetActive(false);

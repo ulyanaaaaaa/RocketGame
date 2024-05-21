@@ -9,6 +9,7 @@ public class ShopFuelItemViewer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _price;
     [SerializeField] private TextMeshProUGUI _description;
     [SerializeField] private Image _background;
+    private TextTranslator _textTranslator;
     private Rocket _rocket;
     private ShopFuelItem _item;
 
@@ -19,8 +20,14 @@ public class ShopFuelItemViewer : MonoBehaviour
 
     private void Awake()
     {
+        _textTranslator = GetComponent<TextTranslator>();
         _item = GetComponent<ShopFuelItem>();
+    }
+
+    private void Start()
+    {
         UpdateInfo();
+        _textTranslator.TranslateText += UpdateInfo;
         _item.OnUpdate += UpdateInfo;
     }
 
@@ -38,8 +45,8 @@ public class ShopFuelItemViewer : MonoBehaviour
 
     private void UpdateInfo()
     {
-        _price.text = $"Price: {_item.Price}";
+        _price.text = _textTranslator.Translate("price") + " " + _item.Price;
         _description.text = " ";
-        _description.text = $"Add fuel: {Math.Round(_item.Fuel, 1)}";
+        _description.text = _textTranslator.Translate("add_fuel") + " " + "+" + Math.Round(_item.Fuel, 1);
     }
 }

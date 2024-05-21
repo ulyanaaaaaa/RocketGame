@@ -1,18 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class LanguageMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Action OnExit;
+    public Translator Translator;
+    
+    public void Setup(Translator translator)
     {
-        
+        Translator = translator;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RussianClick()
     {
-        
+        Translator.ChangeLanguage(Language.Russian);
+    }
+    
+    public void EnglishClick()
+    {
+        Translator.ChangeLanguage(Language.English);
+    }
+    
+    public void Exit()
+    {
+        OnExit?.Invoke();
     }
 }

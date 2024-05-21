@@ -27,38 +27,43 @@ public class PlayerInput : MonoBehaviour, IPause
         _pauseService.AddPause(this);
         _rocket.OnDie += Die;
     }
-    
+
     private void Update()
     {
         if (_isPause)
             return;
-        
+
         if (Input.GetKey(KeyCode.D))
             OnRightClicked?.Invoke();
         if (Input.GetKey(KeyCode.A))
             OnLeftClicked?.Invoke();
-        
+
         if (Input.GetKeyDown(KeyCode.W) && !_isPlay)
         {
             _isPlay = true;
             OnPlay?.Invoke();
         }
-        
-        if (Input.GetKeyDown(KeyCode.W) && _isPlay)
+
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _isPlay)
         {
             OnShoot?.Invoke();
         }
 
         foreach (Touch touch in Input.touches)
         {
-            if (touch.tapCount == 2)
+            if (touch.tapCount == 2 && !_isPlay)
+            {
+                _isPlay = true;
                 OnPlay?.Invoke();
+            }
 
-            if (touch.tapCount == 1)
+            if (touch.tapCount == 1 && _isPlay)
                 OnShoot?.Invoke();
         }
     }
-    
+
+
+
     public void Pause()
     {
         _isPause = true;

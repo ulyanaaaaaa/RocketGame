@@ -55,7 +55,6 @@ public class TextTranslator : MonoBehaviour
     private void Translate()
     {
         TextAsset textAsset = Resources.Load<TextAsset>(AssetsPath.DictionaryPath.Dictionary);
-        Debug.Log("transkate");
         string[] data = textAsset.text.Split(new char[] {'\n'});
         for (int i = 0; i < data.Length; i++)
         {
@@ -79,7 +78,7 @@ public class TextTranslator : MonoBehaviour
     
     public string Translate(string id)
     {
-        if (_translator == null)
+        if (_translator == null) 
             throw new Exception("Translator is null");
         
         _language = _translator.Language;
@@ -101,7 +100,7 @@ public class TextTranslator : MonoBehaviour
 
         if (string.IsNullOrEmpty(_result))
             Debug.Log($"Id or word not found: id: {id}");
-
+        
         return _result;
     }
 }

@@ -12,6 +12,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Source/Scripts/Core/Translate/Translator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Scripts/Shop/Ads/AdsItem.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/YandexGame/Example/Scripts/RewardedAd.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.test-framework@1.1.33/UnityEngine.TestRunner/Assertions/InvalidSignatureException.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -114,6 +117,16 @@
       <workItem from="1715188879957" duration="3387000" />
       <workItem from="1715259016705" duration="403000" />
       <workItem from="1715363616253" duration="5363000" />
+      <workItem from="1715424753636" duration="754000" />
+      <workItem from="1715441741509" duration="8241000" />
+      <workItem from="1715900670786" duration="2011000" />
+      <workItem from="1715976215809" duration="9712000" />
+      <workItem from="1716139478514" duration="3164000" />
+      <workItem from="1716211352953" duration="4382000" />
+      <workItem from="1716223407647" duration="2241000" />
+      <workItem from="1716303531792" duration="1573000" />
+      <workItem from="1716306518333" duration="2802000" />
+      <workItem from="1716323882166" duration="6795000" />
     </task>
     <servers />
   </component>

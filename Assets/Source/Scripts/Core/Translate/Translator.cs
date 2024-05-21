@@ -30,7 +30,6 @@ public class Translator : MonoBehaviour
     public void ChangeLanguage(Language language)
     {
         Language = language;
-        Debug.Log(Language.ToString());
         OnLanguageChanged?.Invoke(language);
         Save();
     }

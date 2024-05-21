@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3008841032823835085}
   - component: {fileID: 7187236426728760805}
   - component: {fileID: 8568543859725644239}
+  - component: {fileID: 4530600255536814505}
   m_Layer: 5
   m_Name: ScoreCounter
   m_TagString: Untagged
@@ -148,3 +149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e893c7d98495d6d489e070b23eff841e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4530600255536814505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7739585626489468465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d7754337516a141a4f0c18c3680c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _language: 0
+  _translator: {fileID: 0}
+  Id: 
+  _notTranslateOnStart: 0

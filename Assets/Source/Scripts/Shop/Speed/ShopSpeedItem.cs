@@ -30,6 +30,8 @@ public class ShopSpeedItem : MonoBehaviour
         
         if (!_saveService.Exists(_id))
         {
+            Speed = 10;
+            Price = 500;
             Save();
         }
         else
@@ -41,8 +43,8 @@ public class ShopSpeedItem : MonoBehaviour
         if (_rocket.TrySpend(Price))
         {
             _rocket.AddSpeed(Speed);
-            Price *= 2;
-            Speed *= 1.1f;
+            Price *= 9;
+            Speed *= 1.01f;
             OnUpdate?.Invoke();
             Save();
         }

@@ -20,15 +20,14 @@ public class Rocket : MonoBehaviour, IPause
     private Coroutine _fuelTick;
     private MoneyCounter _moneyCounter;
     private FuelCounter _fuelCounter;
+    private ISaveService _saveService;
+    private PauseService _pauseService;
+    private SpeedCounter _speedCounter;
+    private Touch touch;
     private bool _isPlay;
     private float _tempSpeed;
     private bool _canShoot = true;
     private bool _isPause;
-    private ISaveService _saveService;
-    private PauseService _pauseService;
-    private SpeedCounter _speedCounter;
-    private Vector3 touchPosition;
-    private bool isDragging;
     
     public void Setup(PlayerInput playerInput, MoneyCounter moneyCounter, FuelCounter fuelCounter, 
         PauseService pauseService, SpeedCounter speedCounter)
@@ -54,7 +53,7 @@ public class Rocket : MonoBehaviour, IPause
         if (!_saveService.Exists(_id))
         {
             Wallet = 0;
-            MaxFuel = 50;
+            MaxFuel = 10;
             Speed = 10;
             Save();
         }
@@ -65,10 +64,16 @@ public class Rocket : MonoBehaviour, IPause
         _moneyCounter.CurrentMoney();
         _fuelCounter.CurrentMaxFuel();
         _speedCounter.CurrentSpeed();
+        
         _playerInput.OnPlay += StartPlay;
         _playerInput.OnShoot += Shoot;
         _playerInput.OnLeftClicked += TurnLeft;
         _playerInput.OnRightClicked += TurnRight;
+    }
+
+    private void OnEnable()
+    {
+        OnDie += Save;
         OnDie += () => _pauseService.Pause();
     }
 
@@ -76,60 +81,24 @@ public class Rocket : MonoBehaviour, IPause
     {
         if (!_isPlay)
             return;
+
         if (_isPause)
             return;
 
         _rigidbody.velocity = Vector3.up * Speed;
         
-        if (Application.isMobilePlatform)
+        if (Input.touchCount > 0)
         {
-            if (Input.touchCount > 0)
+            touch = Input.GetTouch(0);
+            
+            if (touch.phase == TouchPhase.Moved)
             {
-                Touch touch = Input.GetTouch(0);
-
-                switch (touch.phase)
-                {
-                    case TouchPhase.Began:
-                        touchPosition = touch.position;
-                        isDragging = true;
-                        break;
-                    case TouchPhase.Moved:
-                        touchPosition = touch.position;
-                        break;
-                    case TouchPhase.Ended:
-                        isDragging = false;
-                        break;
-                }
-            }
-            else
-            {
-                isDragging = false;
+                Vector2 touchDeltaPosition = touch.deltaPosition;
+                transform.Translate(touchDeltaPosition.x, Time.deltaTime/100, 0, 0);
             }
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (!_isPlay)
-            return;
-
-        if (_isPause)
-            return;
-        
-        if (Application.isMobilePlatform)
-        {
-            if (isDragging)
-            {
-                Vector3 direction = (touchPosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
-                _rigidbody.velocity = new Vector3(direction.x * Speed, _rigidbody.velocity.y, 0f);
-            }
-            else
-            {
-                _rigidbody.velocity = new Vector3(0f, _rigidbody.velocity.y, 0f);
-            }
-        }
-    }
-    
     public void AddSpeed(float speed)
     {
         Speed += speed;
@@ -140,6 +109,13 @@ public class Rocket : MonoBehaviour, IPause
     {
         MaxFuel += fuel;
         _fuelCounter.CurrentMaxFuel();
+    }
+
+    public void AddMoney(int count)
+    {
+        Wallet += count;
+        _moneyCounter.CurrentMoney();
+        _isPlay = false;
     }
 
     public bool TrySpend(int amount)
@@ -158,10 +134,17 @@ public class Rocket : MonoBehaviour, IPause
         }
     }
 
+    public void Continue()
+    {
+        transform.position = new Vector3(0, transform.position.y + 3, 0);
+        transform.rotation = Quaternion.identity;
+        _pauseService.Resume();
+        _isPlay = true;
+        _fuelTick = StartCoroutine(FuelTick());
+    }
+
     private void StartPlay()
     {
-        _playerInput.OnLeftClicked += TurnLeft;
-        _playerInput.OnRightClicked += TurnRight;
         _isPlay = true;
         _fuelTick = StartCoroutine(FuelTick());
     }
@@ -258,6 +241,16 @@ public class Rocket : MonoBehaviour, IPause
         {
             OnDie?.Invoke();
         }
+    }
+    
+    private void OnDisable()
+    {
+        OnDie -= Save;
+        _playerInput.OnPlay -= StartPlay;
+        _playerInput.OnShoot -= Shoot;
+        _playerInput.OnLeftClicked -= TurnLeft;
+        _playerInput.OnRightClicked -= TurnRight;
+        OnDie -= () => _pauseService.Pause();
     }
 
     public void Pause()

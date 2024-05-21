@@ -16,6 +16,9 @@ public class EntryPoint : MonoBehaviour, IPause
     [SerializeField] private RectTransform _inscriptionPosition;
     [SerializeField] private RectTransform _translateButtonPosition;
     [SerializeField] private RectTransform _languageMenuPosition;
+    [SerializeField] private RectTransform _moneyCounterPosition;
+    [SerializeField] private RectTransform _adsItemPosition;
+    [SerializeField] private RectTransform _moneyInfoPosition;
 
     private LanguageMenu _languageMenu;
     private LanguageMenu _languageMenuCreated;
@@ -39,8 +42,6 @@ public class EntryPoint : MonoBehaviour, IPause
     private CloudFabrica _cloudFabricaCreated;
     private Rocket _rocket;
     private Rocket _rocketCreated;
-    private FailWindow _failWindow;
-    private FailWindow _failWindowCreated;
     private FuelBar _fuelBar;
     private FuelBar _fuelBarCreated;
     private ShopSpeedItem _shopSpeedItem;
@@ -59,22 +60,32 @@ public class EntryPoint : MonoBehaviour, IPause
     private Coroutine _createWallTick;
     private Menu _menu;
     private Menu _menuCreated;
+    private FailWindow _failWindow;
+    private FailWindow _failWindowCreated;
     private Translator _translator;
+    private MoneyCounter _moneyCounter;
+    private AdsItem _adsItem;
+    private AdsItem _adsItemCreated;
+    private MoneyInfo _moneyInfo;
+    private MoneyInfo _moneyInfoCreated;
 
     private void Awake()
     {
         _pauseService = GetComponent<PauseService>();
         _playerInput = GetComponent<PlayerInput>();
         _translator = GetComponent<Translator>();
+        _moneyInfo = Resources.Load<MoneyInfo>(AssetsPath.UiPath.MoneyInfo);
+        _adsItem = Resources.Load<AdsItem>(AssetsPath.ShopPath.ItemAds);
+        _moneyCounter = Resources.Load<MoneyCounter>(AssetsPath.MoneyPath.MoneyCounter);
         _languageMenu = Resources.Load<LanguageMenu>(AssetsPath.UiPath.LanguageMenu);
         _translateButton = Resources.Load<TranslateButton>(AssetsPath.UiPath.TranslateButton);
         _menu = Resources.Load<Menu>(AssetsPath.UiPath.Menu);
         _inscription = Resources.Load<PlayInscription>(AssetsPath.UiPath.Inscription);
         _rocket = Resources.Load<Rocket>(AssetsPath.RocketPath.Rocket);
-        _failWindow = Resources.Load<FailWindow>(AssetsPath.UiPath.FailWindow); 
         _fuelBar = Resources.Load<FuelBar>(AssetsPath.FuelPath.FuelBar);
         _pause = Resources.Load<Pause>(AssetsPath.UiPath.Pause);
         _resume = Resources.Load<ResumeMenu>(AssetsPath.UiPath.ResumeMenu);
+        _failWindow = Resources.Load<FailWindow>(AssetsPath.UiPath.FailWindow); 
         _moneyFabrica = Resources.Load<MoneyFabrica>(AssetsPath.MoneyPath.MoneyFabrica);
         _cloudFabrica = Resources.Load<CloudFabrica>(AssetsPath.CloudsPath.CloudFabrica);
         _fuelFabrica = Resources.Load<FuelFabrica>(AssetsPath.FuelPath.FuelFabrica);
@@ -86,6 +97,10 @@ public class EntryPoint : MonoBehaviour, IPause
         CreateRocket();
         CreateUI();
         _pauseService.AddPause(this);
+    }
+
+    private void Start()
+    {
         _playerInput.OnPlay += CreateSpawners;
         _playerInput.OnPlay += CreateScoreCounter;
         _playerInput.OnPlay += DisableShop;
@@ -93,6 +108,8 @@ public class EntryPoint : MonoBehaviour, IPause
         _playerInput.OnPlay += CreateInvisibleWall;
         _playerInput.OnPlay += DisableMenu;
         _playerInput.OnPlay += CreatePause;
+        _playerInput.OnPlay += CreateMoneyCounter;
+        _playerInput.OnPlay += CreateMoneyInfo;
     }
     
     public void Pause()
@@ -108,11 +125,45 @@ public class EntryPoint : MonoBehaviour, IPause
     private void CreateUI()
     {
        CreateFailWindow();
-       CreateShopFuelItem();
-       CreateSpeedFuelItem();
+       CreateMoneyCounter();
        CreateMenu();
        CreateInscription();
        CreateTranslateButton();
+       CreateShopFuelItem();
+       CreateSpeedFuelItem();
+       CreateAdsItem();
+    }
+
+    private void CreateMoneyInfo()
+    {
+        _moneyInfoCreated = Instantiate(_moneyInfo,
+            _moneyInfoPosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _moneyInfoCreated.transform.position = _moneyInfoPosition.GetComponent<RectTransform>().position;
+        
+        TextTranslator[] textTranslators = _moneyInfoCreated.GetComponentsInChildren<TextTranslator>();
+        foreach (TextTranslator textTranslator in textTranslators)
+        {
+            textTranslator.Setup(_translator);
+        }
+    }
+
+    private void CreateAdsItem()
+    {
+        _adsItemCreated = Instantiate(_adsItem, 
+            _adsItemPosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _adsItemCreated.transform.position = _adsItemPosition.GetComponent<RectTransform>().position;
+        
+        _adsItemCreated.GetComponent<AdsItem>().Setup(_rocketCreated);
+        
+        TextTranslator[] textTranslators = _adsItemCreated.GetComponentsInChildren<TextTranslator>();
+        foreach (TextTranslator textTranslator in textTranslators)
+        {
+            textTranslator.Setup(_translator);
+        }
     }
 
     private void CreateTranslateButton()
@@ -131,9 +182,10 @@ public class EntryPoint : MonoBehaviour, IPause
             _languageMenuPosition.GetComponent<RectTransform>().position,
             Quaternion.identity,
             _canvas.transform);
-        _languageMenuCreated.GetComponentInChildren<ExitButton>().OnClick += () 
+        _languageMenuCreated.OnExit += () 
             => Destroy(_languageMenuCreated.gameObject);
         _languageMenuCreated.transform.position = _languageMenuPosition.GetComponent<RectTransform>().position;
+        _languageMenuCreated.Setup(_translator);
     }
 
     private void CreateInscription()
@@ -142,7 +194,19 @@ public class EntryPoint : MonoBehaviour, IPause
             _inscriptionPosition.GetComponent<RectTransform>().position,
             Quaternion.identity,
             _canvas.transform);
+        _inscriptionCreated.GetComponent<TextTranslator>().Setup(_translator);
         _inscriptionCreated.transform.position = _inscriptionPosition.GetComponent<RectTransform>().position;
+    }
+
+    private void CreateMoneyCounter()
+    {
+        _moneyCounterCreated = Instantiate(_moneyCounter,
+            _moneyCounterPosition.GetComponent<RectTransform>().position,
+            Quaternion.identity,
+            _canvas.transform);
+        _moneyCounterCreated.Setup(_rocketCreated);
+        _moneyCounterCreated.GetComponent<TextTranslator>().Setup(_translator);
+        _moneyCounterCreated.transform.position = _moneyCounterPosition.GetComponent<RectTransform>().position;
     }
 
     private void CreateMenu()
@@ -154,9 +218,8 @@ public class EntryPoint : MonoBehaviour, IPause
         _menuCreated.transform.position = _menuPosition.GetComponent<RectTransform>().position;
         _menuCreated.GetComponentInChildren<SpeedCounter>().Setup(_rocketCreated);
         _menuCreated.GetComponentInChildren<BestScore>().Setup(_rocketCreated);
-        _menuCreated.GetComponentInChildren<MoneyCounter>().Setup(_rocketCreated);
         _menuCreated.GetComponentInChildren<FuelCounter>().Setup(_rocketCreated);
-        _rocketCreated.Setup(_playerInput, _menuCreated.GetComponentInChildren<MoneyCounter>(),
+        _rocketCreated.Setup(_playerInput, _moneyCounterCreated,
             _menuCreated.GetComponentInChildren<FuelCounter>(),
             _pauseService,
             _menuCreated.GetComponentInChildren<SpeedCounter>());
@@ -190,6 +253,29 @@ public class EntryPoint : MonoBehaviour, IPause
         _resumeCreated.GetComponentInChildren<Resume>().Setup(_pauseService);
         _resumeCreated.GetComponentInChildren<Resume>().OnResume += CreatePause;
         _resumeCreated.GetComponentInChildren<Resume>().OnResume += () => Destroy(_resumeCreated.gameObject);
+        
+        TextTranslator[] textTranslators = _resumeCreated.GetComponentsInChildren<TextTranslator>();
+        foreach (TextTranslator textTranslator in textTranslators)
+        {
+            textTranslator.Setup(_translator);
+        }
+    }
+    
+    private void CreateFailWindow()
+    {
+        _failWindowCreated = Instantiate(_failWindow, 
+            _failWindow.GetComponent<RectTransform>().localPosition, 
+            Quaternion.identity, 
+            _canvas.transform);
+        _failWindowCreated.GetComponent<RectTransform>().localPosition = Vector3.zero;
+        _failWindowCreated.Setup(_rocketCreated);
+        _failWindowCreated.GetComponentInChildren<AdsButton>().Setup(_rocketCreated, _pauseService);
+        
+        TextTranslator[] textTranslators = _failWindowCreated.GetComponentsInChildren<TextTranslator>();
+        foreach (TextTranslator text in textTranslators)
+        {
+            text.Setup(_translator);
+        }
     }
     
 
@@ -200,17 +286,8 @@ public class EntryPoint : MonoBehaviour, IPause
             Quaternion.identity,
             _canvas.transform);
         _scoreCounterCreated.Setup(_rocketCreated);
+        _scoreCounterCreated.GetComponent<TextTranslator>().Setup(_translator);
         _scoreCounterCreated.transform.position = _scoreCounterPosition.GetComponent<RectTransform>().position;
-    }
-
-    private void CreateFailWindow()
-    {
-        _failWindowCreated = Instantiate(_failWindow, 
-            _failWindow.GetComponent<RectTransform>().localPosition, 
-            Quaternion.identity, 
-            _canvas.transform);
-        _failWindowCreated.GetComponent<RectTransform>().localPosition = Vector3.zero;
-        _failWindowCreated.Setup(_rocketCreated);
     }
 
     private void CreateSpeedFuelItem()
@@ -219,6 +296,7 @@ public class EntryPoint : MonoBehaviour, IPause
             _speedShopPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
             _canvas.transform);
+        _shopSpeedItemCreated.GetComponent<TextTranslator>().Setup(_translator);
         _shopSpeedItemCreated.transform.position = _speedShopPosition.GetComponent<RectTransform>().position;
         _shopSpeedItemCreated.Setup(_rocketCreated);
         _shopSpeedItemCreated.GetComponent<ShopSpeedItemViewer>().Setup(_rocketCreated);
@@ -230,6 +308,7 @@ public class EntryPoint : MonoBehaviour, IPause
             _fuelShopPosition.GetComponent<RectTransform>().position, 
             Quaternion.identity, 
             _canvas.transform);
+        _shopFuelItemCreated.GetComponent<TextTranslator>().Setup(_translator);
         _shopFuelItemCreated.Setup(_rocketCreated);
         _shopFuelItemCreated.GetComponent<ShopFuelItemViewer>().Setup(_rocketCreated);
         _shopFuelItemCreated.transform.position = _fuelShopPosition.GetComponent<RectTransform>().position;
@@ -277,6 +356,7 @@ public class EntryPoint : MonoBehaviour, IPause
     {
         _shopSpeedItemCreated.gameObject.SetActive(false);
         _shopFuelItemCreated.gameObject.SetActive(false);
+        _adsItemCreated.gameObject.SetActive(false);
     }
 
     private void DisableMenu()

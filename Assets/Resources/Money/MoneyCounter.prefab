@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2030773052655778963}
   - component: {fileID: 2030773052655778964}
   - component: {fileID: 3369171924028990058}
+  - component: {fileID: 3184261828947046448}
   m_Layer: 5
   m_Name: MoneyCounter
   m_TagString: Untagged
@@ -26,7 +27,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030773052655778967}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34,10 +35,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.34500003, y: 0.88224673}
-  m_AnchorMax: {x: 0.5375852, y: 0.9608635}
-  m_AnchoredPosition: {x: 0.7670288, y: -0.099975586}
-  m_SizeDelta: {x: -1.5341, y: 0.05999756}
+  m_AnchorMin: {x: 0.34500003, y: 0.87862366}
+  m_AnchorMax: {x: 0.702, y: 0.9608635}
+  m_AnchoredPosition: {x: -35, y: -6.4224854}
+  m_SizeDelta: {x: -1.5341, y: -1.94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2030773052655778963
 CanvasRenderer:
@@ -130,7 +131,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0.5819092, w: 0}
+  m_margin: {x: 0, y: 0, z: -1.427063, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -148,3 +149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f8109327189c444a9c1aca24c5df24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3184261828947046448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030773052655778967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d7754337516a141a4f0c18c3680c27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _language: 0
+  _translator: {fileID: 0}
+  Id: 
+  _notTranslateOnStart: 1
